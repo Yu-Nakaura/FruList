@@ -3,6 +3,8 @@ package app.nakaura.chloe.original
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import app.nakaura.chloe.original.databinding.ActivityMainBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
