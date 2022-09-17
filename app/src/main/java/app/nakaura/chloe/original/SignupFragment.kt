@@ -1,17 +1,22 @@
 package app.nakaura.chloe.original
 
+import android.content.ContentValues
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import app.nakaura.chloe.original.databinding.FragmentSignupBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class SignupFragment : Fragment() {
     private var _binding: FragmentSignupBinding? = null
     private val binding get() = _binding!!
+    private val db = Firebase.firestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +35,7 @@ class SignupFragment : Fragment() {
         binding.registerButton.setOnClickListener {
             changeViewToGroup()
         }
+        addData()
         changeTextColor()
 
         binding.okButton.setOnClickListener {
@@ -41,6 +47,11 @@ class SignupFragment : Fragment() {
                 fragmentTransaction?.commit()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun changeViewToGroup(){
@@ -126,9 +137,24 @@ class SignupFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun addData() {
+        val userName: String = binding.userSignupText.text.toString()
+        val password: String = binding.passwordSignupText.text.toString()
+        Log.d("userName", userName)
+        Log.d("password", password)
+        val userInfoMap = hashMapOf(
+            "userName" to userName,
+            "password" to password
+        )
+        Log.d("userInfoMap", userInfoMap.toString())
+        db.collection("users")
+            .add(userInfoMap)
+            .addOnSuccessListener { documentReference ->
+                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.d(ContentValues.TAG, "Error adding document", e)
+            }
     }
 
 }
