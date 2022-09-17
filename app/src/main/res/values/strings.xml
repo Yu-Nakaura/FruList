@@ -2,4 +2,8 @@
     <string name="app_name">Original</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chart_icon">Icon</string>
+    <string name="person_icon">Icon</string>
+    <string name="add_icon">Icon</string>
+    <string name="icon_background">Icon</string>
 </resources>

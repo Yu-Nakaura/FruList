@@ -33,9 +33,10 @@ class SignupFragment : Fragment() {
         binding.okButton.isEnabled = false
 
         binding.registerButton.setOnClickListener {
+            registerUser()
             changeViewToGroup()
         }
-        addData()
+
         changeTextColor()
 
         binding.okButton.setOnClickListener {
@@ -54,7 +55,7 @@ class SignupFragment : Fragment() {
         _binding = null
     }
 
-    private fun changeViewToGroup(){
+    private fun changeViewToGroup() {
         binding.userSignupText.visibility = View.INVISIBLE
         binding.passwordSignupText.visibility = View.INVISIBLE
         binding.registerButton.visibility = View.INVISIBLE
@@ -70,12 +71,13 @@ class SignupFragment : Fragment() {
         binding.groupTitleText.text = "グループを選ぼう"
     }
 
-    private fun changeTextColor(){
+    private fun changeTextColor() {
         //apple
-        binding.appleImage.setOnClickListener{
+        binding.appleImage.setOnClickListener {
             binding.appleText.setTextColor(context?.let { it1 ->
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_red)
+                    it1, R.color.dark_red
+                )
             })
             binding.lemonText.setTextColor(Color.GRAY)
             binding.pearText.setTextColor(Color.GRAY)
@@ -88,10 +90,11 @@ class SignupFragment : Fragment() {
             binding.okButton.isEnabled = true
         }
         //lemon
-        binding.lemonImage.setOnClickListener{
+        binding.lemonImage.setOnClickListener {
             binding.lemonText.setTextColor(context?.let { it1 ->
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_yellow)
+                    it1, R.color.dark_yellow
+                )
             })
             binding.appleText.setTextColor(Color.GRAY)
             binding.pearText.setTextColor(Color.GRAY)
@@ -104,10 +107,11 @@ class SignupFragment : Fragment() {
             binding.okButton.isEnabled = true
         }
         //pear
-        binding.pearImage.setOnClickListener{
+        binding.pearImage.setOnClickListener {
             binding.pearText.setTextColor(context?.let { it1 ->
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_green)
+                    it1, R.color.dark_green
+                )
             })
             binding.appleText.setTextColor(Color.GRAY)
             binding.lemonText.setTextColor(Color.GRAY)
@@ -120,10 +124,11 @@ class SignupFragment : Fragment() {
             binding.okButton.isEnabled = true
         }
         //grape
-        binding.grapeImage.setOnClickListener{
+        binding.grapeImage.setOnClickListener {
             binding.grapeText.setTextColor(context?.let { it1 ->
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_purple)
+                    it1, R.color.dark_purple
+                )
             })
             binding.appleText.setTextColor(Color.GRAY)
             binding.lemonText.setTextColor(Color.GRAY)
@@ -137,14 +142,16 @@ class SignupFragment : Fragment() {
         }
     }
 
-    private fun addData() {
+    private fun registerUser() {
         val userName: String = binding.userSignupText.text.toString()
         val password: String = binding.passwordSignupText.text.toString()
+
         Log.d("userName", userName)
         Log.d("password", password)
+
         val userInfoMap = hashMapOf(
             "userName" to userName,
-            "password" to password
+            "password" to password,
         )
         Log.d("userInfoMap", userInfoMap.toString())
         db.collection("users")
@@ -155,6 +162,27 @@ class SignupFragment : Fragment() {
             .addOnFailureListener { e ->
                 Log.d(ContentValues.TAG, "Error adding document", e)
             }
+    }
+
+    private fun registerGroup(){
+        var group: String = "nothing"
+        binding.appleCard.setOnClickListener {
+            group = "apple"
+            Log.d("group", group)
+        }
+        binding.lemonCard.setOnClickListener {
+            group = "lemon"
+            Log.d("group", group)
+        }
+        binding.pearCard.setOnClickListener {
+            group = "pear"
+            Log.d("group", group)
+        }
+        binding.grapeCard.setOnClickListener {
+            group = "grape"
+            Log.d("group", group)
+        }
+        Log.d("group", group)
     }
 
 }
