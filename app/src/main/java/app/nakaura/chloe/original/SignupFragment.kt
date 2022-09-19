@@ -202,15 +202,15 @@ class SignupFragment : Fragment() {
 
     private fun registerGroup(){
         sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
-        val RegisteredName:String? = sharedPref.getString("userFileName", "")
-        Log.d("RegisteredName", RegisteredName.toString())
-        val RegisteredGroup:String? = sharedPref.getString("groupName", "")
-        Log.d("RegisteredGroup", RegisteredGroup.toString())
-        val registeredGroup = hashMapOf(
-            "group" to RegisteredGroup,
+        val registeredName:String? = sharedPref.getString("userFileName", "")
+        Log.d("RegisteredName", registeredName.toString())
+        val registeredGroup:String? = sharedPref.getString("groupName", "")
+        Log.d("RegisteredGroup", registeredGroup.toString())
+        val addGroupMap = hashMapOf(
+            "group" to registeredGroup,
         )
-        db.collection("users").document("$RegisteredName")
-            .set(registeredGroup, SetOptions.merge())
+        db.collection("users").document("$registeredName")
+            .set(addGroupMap, SetOptions.merge())
     }
 
     private fun makeAllGray(){

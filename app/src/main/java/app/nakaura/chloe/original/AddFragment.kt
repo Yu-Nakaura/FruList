@@ -1,6 +1,9 @@
 package app.nakaura.chloe.original
+
 import android.content.ContentValues
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +18,7 @@ class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
     private val db = Firebase.firestore
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +48,7 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun toToDoFragment(){
+    private fun toToDoFragment() {
         val todoFragment = ToDoFragment()
         val fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.addToBackStack(null)
@@ -52,20 +56,26 @@ class AddFragment : Fragment() {
         fragmentTransaction?.commit()
     }
 
-    private fun saveToDoData(){
-        val title:String = binding.addTitleText.text.toString()
-        var point:String = binding.pointDropbotton.text.toString()
-        val note:String = binding.addNoteText.text.toString()
+    private fun saveToDoData() {
+        val title: String = binding.addToDoText.text.toString()
+        var point: String = binding.pointDropbotton.text.toString()
+        val note: String = binding.addNoteText.text.toString()
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
+        val registeredName: String? = sharedPref.getString("userFileName", "")
+        Log.d("RegisteredName", registeredName.toString())
+
         val toDoMap = hashMapOf(
+            "userName" to registeredName,
             "title" to title,
             "point" to point,
             "note" to note
         )
         Log.d("toDoMap", toDoMap.toString())
-        db.collection("toDo")
-            .add(toDoMap)
-            .addOnSuccessListener { documentReference ->
-                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+
+        db.collection("toDo").document("$registeredName")
+            .set(toDoMap)
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "DocumentSnapshot added")
             }
             .addOnFailureListener { e ->
                 Log.d(ContentValues.TAG, "Error adding document", e)
