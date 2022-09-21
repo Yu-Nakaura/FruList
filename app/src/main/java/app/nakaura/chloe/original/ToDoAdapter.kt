@@ -22,10 +22,8 @@ class ToDoViewHolder(
     private val binding: ToDoListItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(todo: ToDo) {
-        //val userName: String = binding.userSignupText.text.toString()
-        //        val password: String = binding.passwordSignupText.text.toString()
-        binding.checkBox.text = todo.userName
-        binding.pointNumberText.text = todo.point.toString()
+        binding.checkBox.text = todo.title
+        binding.pointText.text = todo.point
     }
 }
 
@@ -37,4 +35,5 @@ private val diffUtilItemCallback = object : DiffUtil.ItemCallback<ToDo>() {
     override fun areItemsTheSame(oldItem: ToDo, newItem: ToDo): Boolean {
         return oldItem.title == newItem.title
     }
+
 }

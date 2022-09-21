@@ -8,6 +8,6 @@
         android:height="100dp" />
 
     <!-- 背景色 -->
-    <solid android:color="@color/dark_blue" />
+    <solid android:color="@color/light_gray" />
 
 </shape>

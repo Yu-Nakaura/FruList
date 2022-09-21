@@ -8,7 +8,15 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="2dp" >
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container"
@@ -16,32 +24,30 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/point_number_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@android:color/darker_gray"
-                tools:layout_editor_absoluteX="29dp"
-                tools:layout_editor_absoluteY="63dp" />
-
-            <TextView
                 android:id="@+id/point_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="pt"
+                android:layout_marginStart="32dp"
+                android:text="0pt"
                 android:textColor="@android:color/darker_gray"
-                tools:layout_editor_absoluteX="37dp"
-                tools:layout_editor_absoluteY="63dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/check_box"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.797" />
 
             <CheckBox
                 android:id="@+id/check_box"
-                android:layout_width="417dp"
+                android:layout_width="370dp"
                 android:layout_height="98dp"
                 android:layout_gravity="top|left"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="list"
                 android:textSize="18dp"
-                tools:layout_editor_absoluteX="-3dp"
-                tools:layout_editor_absoluteY="0dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

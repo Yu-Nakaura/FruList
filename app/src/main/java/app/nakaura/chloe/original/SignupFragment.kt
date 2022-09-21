@@ -1,5 +1,6 @@
 package app.nakaura.chloe.original
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -35,6 +36,7 @@ class SignupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
         binding.okButton.alpha = 0.5f
         binding.okButton.isEnabled = false
 
@@ -79,23 +81,23 @@ class SignupFragment : Fragment() {
         binding.groupTitleText.text = "グループを選ぼう"
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun changeGroup() {
         var group: String = "nothing"
         //apple
         binding.appleImage.setOnClickListener {
             makeAllGray()
-            binding.appleText.setTextColor(context?.let { it1 ->
+            binding.appleText.setTextColor(
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_red
+                    requireActivity(), R.color.dark_red
                 )
-            })
+            )
             changeTransmittance()
             binding.appleImage.alpha = 1.0f
 
             group = "apple"
             Log.d("group", group)
 
-            sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
             val groupName:String = group
             Log.d("groupName", groupName)
             val editor = sharedPref.edit()
@@ -105,18 +107,17 @@ class SignupFragment : Fragment() {
         //lemon
         binding.lemonImage.setOnClickListener {
             makeAllGray()
-            binding.lemonText.setTextColor(context?.let { it1 ->
+            binding.lemonText.setTextColor(
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_yellow
+                    requireActivity(), R.color.dark_yellow
                 )
-            })
+            )
             changeTransmittance()
             binding.lemonImage.alpha = 1.0f
 
             group = "lemon"
             Log.d("group", group)
 
-            sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
             val groupName:String = group
             Log.d("groupName", groupName)
             val editor = sharedPref.edit()
@@ -126,18 +127,17 @@ class SignupFragment : Fragment() {
         //pear
         binding.pearImage.setOnClickListener {
             makeAllGray()
-            binding.pearText.setTextColor(context?.let { it1 ->
+            binding.pearText.setTextColor(
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_green
+                    requireActivity(), R.color.dark_green
                 )
-            })
+            )
             changeTransmittance()
             binding.pearImage.alpha = 1.0f
 
             group = "pear"
             Log.d("group", group)
 
-            sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
             val groupName:String = group
             Log.d("groupName", groupName)
             val editor = sharedPref.edit()
@@ -147,18 +147,17 @@ class SignupFragment : Fragment() {
         //grape
         binding.grapeImage.setOnClickListener {
             makeAllGray()
-            binding.grapeText.setTextColor(context?.let { it1 ->
+            binding.grapeText.setTextColor(
                 AppCompatResources.getColorStateList(
-                    it1, R.color.dark_purple
+                    requireActivity(), R.color.dark_purple
                 )
-            })
+            )
             changeTransmittance()
             binding.grapeImage.alpha = 1.0f
 
             group = "grape"
             Log.d("group", group)
 
-            sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
             val groupName:String = group
             Log.d("groupName", groupName)
             val editor = sharedPref.edit()
@@ -193,7 +192,6 @@ class SignupFragment : Fragment() {
             binding.warningText.isVisible =true
             Log.d("empty", "please enter username and password")
         }
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
         val userFileName:String = userName
         val editor = sharedPref.edit()
         editor.putString("userFileName", userFileName)
@@ -201,7 +199,6 @@ class SignupFragment : Fragment() {
     }
 
     private fun registerGroup(){
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
         val registeredName:String? = sharedPref.getString("userFileName", "")
         Log.d("RegisteredName", registeredName.toString())
         val registeredGroup:String? = sharedPref.getString("groupName", "")
