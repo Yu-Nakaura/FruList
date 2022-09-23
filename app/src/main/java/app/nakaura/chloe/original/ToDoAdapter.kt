@@ -1,9 +1,12 @@
 package app.nakaura.chloe.original
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import android.widget.CheckBox
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.nakaura.chloe.original.databinding.ToDoListItemBinding
 
@@ -15,11 +18,26 @@ class ToDoAdapter : ListAdapter<ToDo, ToDoViewHolder>(diffUtilItemCallback) {
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.binding.checkBox.setOnClickListener(View.OnClickListener {
+            Log.d("チェックされた", position.toString())
+            listener.onItemClick(position)
+        })
     }
+    private lateinit var listener: OnCheckBoxClickListener
+
+    interface OnCheckBoxClickListener{
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnCheckBoxClickListener(listener: OnCheckBoxClickListener){
+        this.listener = listener
+    }
+
 }
 
 class ToDoViewHolder(
-    private val binding: ToDoListItemBinding
+    val binding: ToDoListItemBinding,
+    //val checkBox: CheckBox = binding.checkBox
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(todo: ToDo) {
         binding.checkBox.text = todo.title
