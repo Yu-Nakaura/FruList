@@ -18,7 +18,7 @@ class ToDoAdapter : ListAdapter<ToDo, ToDoViewHolder>(diffUtilItemCallback) {
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.checkBox.setOnClickListener(View.OnClickListener {
+        holder.binding.checkBox.setOnClickListener(View.OnClickListener {
             Log.d("チェックされた", position.toString())
             listener.onItemClick(position)
         })
@@ -36,8 +36,8 @@ class ToDoAdapter : ListAdapter<ToDo, ToDoViewHolder>(diffUtilItemCallback) {
 }
 
 class ToDoViewHolder(
-    private val binding: ToDoListItemBinding,
-    val checkBox: CheckBox = binding.checkBox
+    val binding: ToDoListItemBinding,
+    //val checkBox: CheckBox = binding.checkBox
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(todo: ToDo) {
         binding.checkBox.text = todo.title
