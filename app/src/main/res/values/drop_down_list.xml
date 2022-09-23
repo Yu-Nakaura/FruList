@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="point_list">
+        <item>1pt</item>
+        <item>2pt</item>
+        <item>3pt</item>
+        <item>4pt</item>
+    </string-array>
+</resources>

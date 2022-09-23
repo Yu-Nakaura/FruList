@@ -3,11 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/activity_main.xml" value="0.67" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/add.xml" value="0.1705" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/bar_chart.xml" value="0.1" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/circle_button.xml" value="0.2625" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/done.xml" value="0.2765" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/dropdown_popup_item.xml" value="0.1575" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/image_button_bg.xml" value="0.259" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/person.xml" value="0.1" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/drawable/undo.xml" value="0.2765" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/dropdown_popup_item.xml" value="0.1661600810536981" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/fragment_add.xml" value="0.33" />
         <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/fragment_apple.xml" value="0.1" />
         <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/fragment_lemon.xml" value="0.1" />
-        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/fragment_login.xml" value="0.17426545086119555" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/fragment_login.xml" value="0.5" />
         <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/fragment_signup.xml" value="0.25" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/fragment_to_do.xml" value="0.33" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/layout/to_do_list_item.xml" value="0.395985401459854" />
+        <entry key="..\:/Users/owner/AndroidStudioProjects/Original/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1835" />
       </map>
     </option>
   </component>
@@ -16,5 +29,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1897644927536232" />
+      </ProjectState>
+    </option>
   </component>
 </project>

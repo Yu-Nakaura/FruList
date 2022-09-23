@@ -1,11 +1,14 @@
 package app.nakaura.chloe.original
 
 import android.content.ContentValues.TAG
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import app.nakaura.chloe.original.databinding.FragmentLoginBinding
 import com.google.firebase.firestore.ktx.firestore
@@ -15,6 +18,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     val db = Firebase.firestore
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,27 +51,29 @@ class LoginFragment : Fragment() {
                         //Log.d(TAG, "${document.id} => ${document.data}")
                         val userName: String = document.data?.get("userName").toString()
                         val password: String = document.data?.get("password").toString()
-                        /*
-                        Log.d("userName", userName)
-                        Log.d("password", password)
-                        Log.d("userNameText", userNameText)
-                        Log.d("passwordText", passwordText)
-                         */
                         if (userName == userNameText && password == passwordText) {
                             information = true
+                            binding.falseText.isVisible = false
+                            sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
+                            val user: String = userName
+                            Log.d("user", user)
+                            val editor = sharedPref.edit()
+                            editor.putString("userFileName", user)
+                            editor.apply()
+
                             break
+                        } else {
+                            binding.falseText.isVisible = true
+                            //Log.d("information", information.toString())
                         }
-                        //Log.d("information", information.toString())
                     }
-                    //Log.d("information2", information.toString())
-                    if(information){
+                    if (information) {
                         toToDoFragment()
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents.", exception)
+                    Log.d(TAG, "Error getting documents.", exception)
                 }
-
         }
     }
 
