@@ -1,4 +1,4 @@
-package app.nakaura.chloe.original
+package app.nakaura.chloe.original.login
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
+import app.nakaura.chloe.original.R
+import app.nakaura.chloe.original.todo.ToDoFragment
 import app.nakaura.chloe.original.databinding.FragmentSignupBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
