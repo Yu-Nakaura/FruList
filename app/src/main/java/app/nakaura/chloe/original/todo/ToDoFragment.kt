@@ -124,8 +124,8 @@ class ToDoFragment : Fragment() {
         binding.colorBarChart.isVisible = false
         binding.addButton.isVisible = true
         binding.addButtonBackground.isVisible = true
+        binding.recyclerView.isVisible = true
         binding.barChart.isVisible = false
-        binding.barChart.isVisible = true
         binding.appleIcon.isVisible = false
         binding.lemonIcon.isVisible = false
         binding.pearIcon.isVisible = false
@@ -372,6 +372,8 @@ class ToDoFragment : Fragment() {
     }
 
     private fun getAllUsers() {
+        userArray.clear()
+        groupArray.clear()
         db.collection("users")
             .get()
             .addOnSuccessListener { documents ->
