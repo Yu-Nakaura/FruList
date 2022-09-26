@@ -433,10 +433,10 @@ class ToDoFragment : Fragment() {
     }
 
     private fun makeChart() {
-        val apple:Float = appleArraySum.toFloat()
-        val lemon:Float = lemonArraySum.toFloat()
-        val pear:Float = pearArraySum.toFloat()
-        val grape:Float = grapeArraySum.toFloat()
+        val apple: Float = appleArraySum.toFloat()
+        val lemon: Float = lemonArraySum.toFloat()
+        val pear: Float = pearArraySum.toFloat()
+        val grape: Float = grapeArraySum.toFloat()
 
         val barChart: BarChart = binding.barChart
 

@@ -47,6 +47,7 @@
         android:id="@+id/password_login_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
         android:layout_marginBottom="57dp"
         android:ems="10"
         android:gravity="center"
@@ -54,7 +55,8 @@
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_login_text" />
 
     <TextView
         android:id="@+id/false_text"
