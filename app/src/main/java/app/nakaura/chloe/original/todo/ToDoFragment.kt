@@ -1,8 +1,9 @@
-package app.nakaura.chloe.original
+package app.nakaura.chloe.original.todo
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -12,7 +13,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import app.nakaura.chloe.original.AddFragment
+import app.nakaura.chloe.original.R
 import app.nakaura.chloe.original.databinding.FragmentToDoBinding
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -26,10 +34,20 @@ class ToDoFragment : Fragment() {
     private var docTitleArray: ArrayList<String> = arrayListOf()
     private var clearedTitleArray: ArrayList<String> = arrayListOf()
     private val sortedTitleArray: ArrayList<String> = arrayListOf()
+    private val groupArray: ArrayList<String> = arrayListOf()
+    private val userArray: ArrayList<String> = arrayListOf()
+    private val appleArray: ArrayList<Int> = arrayListOf()
+    private val lemonArray: ArrayList<Int> = arrayListOf()
+    private val pearArray: ArrayList<Int> = arrayListOf()
+    private val grapeArray: ArrayList<Int> = arrayListOf()
     private val individualPointArray: ArrayList<Int> = arrayListOf()
     private val toDoList = ArrayList<ToDo>()
     private val toDoAdapter = ToDoAdapter()
-    private var individualPointSum:Int = 0
+    private var individualPointSum: Int = 0
+    private var appleArraySum:Int = 0
+    private var lemonArraySum:Int = 0
+    private var pearArraySum:Int = 0
+    private var grapeArraySum:Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,7 +90,8 @@ class ToDoFragment : Fragment() {
                             if (task.isSuccessful) {
                                 val userDocument = task.result
                                 if (userDocument != null && userDocument.data != null) {
-                                    val clearedPointString:String = userDocument.data?.get("point").toString()
+                                    val clearedPointString: String =
+                                        userDocument.data?.get("point").toString()
                                     var clearedPointNumber: Int = 0
                                     when (clearedPointString) {
                                         "1pt" -> clearedPointNumber = 1
@@ -105,6 +124,20 @@ class ToDoFragment : Fragment() {
         binding.colorBarChart.isVisible = false
         binding.addButton.isVisible = true
         binding.addButtonBackground.isVisible = true
+        binding.recyclerView.isVisible = true
+        binding.barChart.isVisible = false
+        binding.appleIcon.isVisible = false
+        binding.lemonIcon.isVisible = false
+        binding.pearIcon.isVisible = false
+        binding.grapeIcon.isVisible = false
+        binding.appleNumber.isVisible = false
+        binding.lemonNumber.isVisible = false
+        binding.pearNumber.isVisible = false
+        binding.grapeNumber.isVisible = false
+        appleArray.clear()
+        lemonArray.clear()
+        pearArray.clear()
+        grapeArray.clear()
     }
 
     private fun changeToChartView() {
@@ -113,6 +146,19 @@ class ToDoFragment : Fragment() {
         binding.addButton.isVisible = false
         binding.addButtonBackground.isVisible = false
         binding.recyclerView.isVisible = false
+        binding.barChart.isVisible = true
+        binding.appleIcon.isVisible = true
+        binding.lemonIcon.isVisible = true
+        binding.pearIcon.isVisible = true
+        binding.grapeIcon.isVisible = true
+        binding.appleNumber.isVisible = true
+        binding.lemonNumber.isVisible = true
+        binding.pearNumber.isVisible = true
+        binding.grapeNumber.isVisible = true
+        appleArraySum = 0
+        lemonArraySum = 0
+        pearArraySum = 0
+        grapeArraySum = 0
         getAllUsers()
     }
 
@@ -181,7 +227,7 @@ class ToDoFragment : Fragment() {
                 getToDoList()
             }
             .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
+                Log.d(TAG, "Error getting documents: ", exception)
             }
     }
 
@@ -234,11 +280,11 @@ class ToDoFragment : Fragment() {
         fragmentTransaction?.commit()
     }
 
-    private fun setClearedPoint(clearedPointNumber: Int, arrayPosition: Int){
+    private fun setClearedPoint(clearedPointNumber: Int, arrayPosition: Int) {
         val clearedPointMap = hashMapOf(
             "point" to clearedPointNumber
         )
-        Log.d("clearedPointMap", sortedTitleArray[arrayPosition]+"," +clearedPointMap.toString())
+        Log.d("clearedPointMap", sortedTitleArray[arrayPosition] + "," + clearedPointMap.toString())
 
         db.collection("users").document(registeredName)
             .collection("ClearedToDo").document(sortedTitleArray[arrayPosition])
@@ -251,12 +297,12 @@ class ToDoFragment : Fragment() {
             }
     }
 
-    private fun clearCheckedToDo(arrayPosition: Int){
+    private fun clearCheckedToDo(arrayPosition: Int) {
         db.collection("users").document(registeredName)
             .collection("ToDo").document(sortedTitleArray[arrayPosition])
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .addOnFailureListener { e -> Log.d(TAG, "Error deleting document", e) }
     }
 
     private fun getIndividualPoint() {
@@ -273,11 +319,11 @@ class ToDoFragment : Fragment() {
                 getClearedPointSum()
             }
             .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
+                Log.d(TAG, "Error getting documents: ", exception)
             }
     }
 
-    private fun getClearedPointSum(){
+    private fun getClearedPointSum() {
         for (i in 0 until clearedTitleArray.size) {
             db.collection("users")
                 .document(registeredName)
@@ -290,7 +336,7 @@ class ToDoFragment : Fragment() {
                         if (userDocument != null && userDocument.data != null) {
                             val pointString = userDocument.data?.get("point").toString()
                             Log.d("pointString", pointString)
-                            if(pointString != "null"){
+                            if (pointString != "null") {
                                 val clearedPoint: Int = pointString.toInt()
                                 individualPointArray.add(clearedPoint)
                                 Log.d("individualPointArray", individualPointArray.toString())
@@ -309,7 +355,7 @@ class ToDoFragment : Fragment() {
         }
     }
 
-    private fun putSum(){
+    private fun putSum() {
         val pointSumMap = hashMapOf(
             "sum" to individualPointSum
         )
@@ -325,16 +371,174 @@ class ToDoFragment : Fragment() {
             }
     }
 
-    private fun getAllUsers(){
+    private fun getAllUsers() {
+        userArray.clear()
+        groupArray.clear()
         db.collection("users")
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
+                    Log.d(TAG, "${document.id} => ${document.data["group"]}")
+                    userArray.add(document.id)
+                    Log.d("userArray", userArray.toString())
+                    groupArray.add(document.data["group"].toString())
+                    Log.d("groupArray", groupArray.toString())
                 }
+                getSum()
             }
             .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
+                Log.d(TAG, "Error getting documents: ", exception)
             }
     }
+
+    private fun getSum() {
+        for (i in 0 until userArray.size) {
+            db.collection("users")
+                .document(userArray[i])
+                .collection("ClearedToDo")
+                .document("sum")
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val userDocument = task.result
+                        if (userDocument != null && userDocument.data != null) {
+                            Log.d("sum", "${userArray[i]} -> ${userDocument.data}")
+                            val sumData = userDocument.data?.get("sum").toString()
+                            val groupData = groupArray[i]
+                            Log.d("sumData", sumData)
+                            Log.d("groupData", groupData)
+                            val sumValue: Int = sumData.toInt()
+                            distributePoint(groupData, sumValue)
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "Error getting documents: ", exception)
+                }
+        }
+    }
+
+    private fun distributePoint(groupData: String, sumValue: Int) {
+        when (groupData) {
+            "apple" -> appleArray.add(sumValue)
+            "lemon" -> lemonArray.add(sumValue)
+            "pear" -> pearArray.add(sumValue)
+            "grape" -> grapeArray.add(sumValue)
+        }
+        appleArraySum = appleArray.sum()
+        lemonArraySum = lemonArray.sum()
+        pearArraySum = pearArray.sum()
+        grapeArraySum = grapeArray.sum()
+        makeChart()
+    }
+
+    private fun makeChart() {
+        val apple: Float = appleArraySum.toFloat()
+        val lemon: Float = lemonArraySum.toFloat()
+        val pear: Float = pearArraySum.toFloat()
+        val grape: Float = grapeArraySum.toFloat()
+
+        val barChart: BarChart = binding.barChart
+
+        barChart.axisLeft.apply {
+            axisMinimum = 0F
+            axisMaximum = 100F
+            labelCount = 5
+            textSize = 10F
+            setDrawTopYLabelEntry(true)
+        }
+
+        barChart.axisRight.apply {
+            axisMinimum = 0F
+            axisMaximum = 3F
+            setDrawLabels(false)
+            setDrawGridLines(false)
+            setDrawZeroLine(false)
+            setDrawTopYLabelEntry(true)
+        }
+
+        barChart.xAxis.apply {
+            labelCount = 0
+            setDrawLabels(false)
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
+        }
+
+        barChart.description.isEnabled= false
+        barChart.legend.isEnabled= false
+
+        //グラフのデータを設定
+        val appleGraph: ArrayList<BarEntry> = ArrayList()
+        appleGraph.add(BarEntry(0F, apple))
+
+        val lemonGraph: ArrayList<BarEntry> = ArrayList()
+        lemonGraph.add(BarEntry(1F, lemon))
+
+        val pearGraph: ArrayList<BarEntry> = ArrayList()
+        pearGraph.add(BarEntry(2F, pear))
+
+        val grapeGraph: ArrayList<BarEntry> = ArrayList()
+        grapeGraph.add(BarEntry(3F, grape))
+
+        //chartに設定
+        val appleDataSet = BarDataSet(appleGraph, "apple").apply {
+            isHighlightEnabled = false
+            setColors(resources.getColor(R.color.light_red))
+        }
+
+        val lemonDataSet = BarDataSet(lemonGraph, "lemon").apply {
+            isHighlightEnabled = false
+            setColors(resources.getColor(R.color.light_yellow))
+        }
+
+        val pearDataSet = BarDataSet(pearGraph, "pear").apply {
+            isHighlightEnabled = false
+            setColors(resources.getColor(R.color.light_green))
+        }
+
+        val grapeDataSet = BarDataSet(grapeGraph, "grape").apply {
+            isHighlightEnabled = false
+            setColors(resources.getColor(R.color.light_purple))
+        }
+
+        appleDataSet.setDrawValues(false)
+        lemonDataSet.setDrawValues(false)
+        pearDataSet.setDrawValues(false)
+        grapeDataSet.setDrawValues(false)
+
+        val dataSets: MutableList<IBarDataSet> = ArrayList()
+        dataSets.add(appleDataSet)
+        dataSets.add(lemonDataSet)
+        dataSets.add(pearDataSet)
+        dataSets.add(grapeDataSet)
+
+        barChart.data = BarData(dataSets)
+        barChart.invalidate() // refresh
+
+        setGraphNumber()
+    }
+
+    private fun setGraphNumber(){
+        binding.appleNumber.text = appleArraySum.toString()
+        binding.lemonNumber.text = lemonArraySum.toString()
+        binding.pearNumber.text = pearArraySum.toString()
+        binding.grapeNumber.text = grapeArraySum.toString()
+
+        if(appleArraySum != 0){
+            binding.appleNumber.setTextColor(Color.WHITE)
+        }
+
+        if(lemonArraySum != 0){
+            binding.lemonNumber.setTextColor(Color.WHITE)
+        }
+
+        if(pearArraySum != 0){
+            binding.pearNumber.setTextColor(Color.WHITE)
+        }
+
+        if(grapeArraySum != 0){
+            binding.grapeNumber.setTextColor(Color.WHITE)
+        }
+    }
+
 }

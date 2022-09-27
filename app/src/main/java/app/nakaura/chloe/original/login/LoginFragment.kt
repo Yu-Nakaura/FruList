@@ -1,4 +1,4 @@
-package app.nakaura.chloe.original
+package app.nakaura.chloe.original.login
 
 import android.content.ContentValues.TAG
 import android.content.SharedPreferences
@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import app.nakaura.chloe.original.R
+import app.nakaura.chloe.original.todo.ToDoFragment
 import app.nakaura.chloe.original.databinding.FragmentLoginBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
