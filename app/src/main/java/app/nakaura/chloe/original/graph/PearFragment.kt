@@ -96,7 +96,7 @@ class PearFragment : Fragment() {
         Log.d("makeChart", "makeChart")
         barChart.axisLeft.apply {
             axisMinimum = 0F
-            axisMaximum = 50F
+            axisMaximum = 80F
             labelCount = 5
             textSize = 10F
             setDrawTopYLabelEntry(true)
