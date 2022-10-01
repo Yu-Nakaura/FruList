@@ -17,6 +17,7 @@ import app.nakaura.chloe.original.AddFragment
 import app.nakaura.chloe.original.EditFragment
 import app.nakaura.chloe.original.R
 import app.nakaura.chloe.original.databinding.FragmentToDoBinding
+import app.nakaura.chloe.original.graph.GraphAdapter
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -68,11 +69,21 @@ class ToDoFragment : Fragment() {
         getGroup()
         getToDoTitle()
 
+
+
         binding.personButton.setOnClickListener {
             changeToPersonalView()
         }
         binding.barChartButton.setOnClickListener {
             changeToChartView()
+        }
+        binding.individualButton.setOnClickListener {
+            changeToIndividualView()
+            /// adapterのインスタンス生成
+            val graphAdapter = GraphAdapter(this)
+            /// adapterをセット
+            val viewPager2 = binding.viewPager
+            viewPager2.adapter = graphAdapter
         }
         binding.addButton.setOnClickListener {
             toAddFragment()
@@ -160,6 +171,7 @@ class ToDoFragment : Fragment() {
     private fun changeToPersonalView() {
         binding.colorBarPerson.isVisible = true
         binding.colorBarChart.isVisible = false
+        binding.colorBarIndividual.isVisible = false
         binding.addButton.isVisible = true
         binding.recyclerView.isVisible = true
         binding.barChart.isVisible = false
@@ -171,6 +183,8 @@ class ToDoFragment : Fragment() {
         binding.lemonNumber.isVisible = false
         binding.pearNumber.isVisible = false
         binding.grapeNumber.isVisible = false
+        binding.viewPager.isVisible = false
+        binding.barChartButton.isEnabled = true
         appleArray.clear()
         lemonArray.clear()
         pearArray.clear()
@@ -179,6 +193,7 @@ class ToDoFragment : Fragment() {
 
     private fun changeToChartView() {
         binding.colorBarPerson.isVisible = false
+        binding.colorBarIndividual.isVisible = false
         binding.colorBarChart.isVisible = true
         binding.addButton.isVisible = false
         binding.recyclerView.isVisible = false
@@ -191,11 +206,36 @@ class ToDoFragment : Fragment() {
         binding.lemonNumber.isVisible = true
         binding.pearNumber.isVisible = true
         binding.grapeNumber.isVisible = true
+        binding.viewPager.isVisible = false
+        binding.barChartButton.isEnabled = false
         appleArraySum = 0
         lemonArraySum = 0
         pearArraySum = 0
         grapeArraySum = 0
         getAllUsers()
+    }
+
+    private fun changeToIndividualView() {
+        binding.colorBarPerson.isVisible = false
+        binding.colorBarChart.isVisible = false
+        binding.colorBarIndividual.isVisible = true
+        binding.addButton.isVisible = false
+        binding.recyclerView.isVisible = false
+        binding.barChart.isVisible = false
+        binding.appleIcon.isVisible = false
+        binding.lemonIcon.isVisible = false
+        binding.pearIcon.isVisible = false
+        binding.grapeIcon.isVisible = false
+        binding.appleNumber.isVisible = false
+        binding.lemonNumber.isVisible = false
+        binding.pearNumber.isVisible = false
+        binding.grapeNumber.isVisible = false
+        binding.viewPager.isVisible = true
+        binding.barChartButton.isEnabled = true
+        appleArray.clear()
+        lemonArray.clear()
+        pearArray.clear()
+        grapeArray.clear()
     }
 
     private fun getGroup() {
@@ -227,24 +267,28 @@ class ToDoFragment : Fragment() {
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_red)
                 binding.colorBarChart.setBackgroundResource(R.color.light_red)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_red)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_red)
             }
             "lemon" -> {
                 Log.d("change", "changeToLemon")
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_yellow)
                 binding.colorBarChart.setBackgroundResource(R.color.light_yellow)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_yellow)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_yellow)
             }
             "pear" -> {
                 Log.d("change", "changeToPear")
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_green)
                 binding.colorBarChart.setBackgroundResource(R.color.light_green)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_green)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_green)
             }
             "grape" -> {
                 Log.d("change", "changeToGrape")
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_purple)
                 binding.colorBarChart.setBackgroundResource(R.color.light_purple)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_purple)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_purple)
             }
         }
     }

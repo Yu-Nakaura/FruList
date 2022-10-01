@@ -70,6 +70,11 @@ class EditFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun saveToDoData() {
         val editedTitle: String = binding.editToDoText.text.toString()
         var editedPoint: String = binding.pointDropbotton.text.toString()
