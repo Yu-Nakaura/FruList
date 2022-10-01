@@ -71,21 +71,20 @@ class EditFragment : Fragment() {
     }
 
     private fun saveToDoData() {
-        val title: String = binding.editToDoText.text.toString()
-        var point: String = binding.pointDropbotton.text.toString()
-        val note: String = binding.editNoteText.text.toString()
+        val editedTitle: String = binding.editToDoText.text.toString()
+        var editedPoint: String = binding.pointDropbotton.text.toString()
+        val editedNote: String = binding.editNoteText.text.toString()
         val toDoMap = hashMapOf(
             "userName" to registeredName,
-            "title" to title,
-            "point" to point,
-            "note" to note
+            "title" to editedTitle,
+            "point" to editedPoint,
+            "note" to editedNote
         )
-        Log.d("toDoMap", toDoMap.toString())
 
         if (title.isNotEmpty() && point.isNotEmpty()) {
             binding.errorText.isVisible = false
-            db.collection("users").document("$registeredName")
-                .collection("ToDo").document("$title")
+            db.collection("users").document(registeredName)
+                .collection("ToDo").document(editedTitle)
                 .set(toDoMap)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "DocumentSnapshot added")
@@ -93,6 +92,13 @@ class EditFragment : Fragment() {
                 .addOnFailureListener { e ->
                     Log.d(ContentValues.TAG, "Error adding document", e)
                 }
+            if(title != editedTitle){
+                db.collection("users").document(registeredName)
+                    .collection("ToDo").document(title)
+                    .delete()
+                    .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully deleted!") }
+                    .addOnFailureListener { e -> Log.d(ContentValues.TAG, "Error deleting document", e) }
+            }
             toToDoFragment()
         } else {
             binding.errorText.isVisible = true
