@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.nakaura.chloe.original.AddFragment
+import app.nakaura.chloe.original.EditFragment
 import app.nakaura.chloe.original.R
 import app.nakaura.chloe.original.databinding.FragmentToDoBinding
 import com.github.mikephil.charting.charts.BarChart
@@ -44,10 +45,11 @@ class ToDoFragment : Fragment() {
     private val toDoList = ArrayList<ToDo>()
     private val toDoAdapter = ToDoAdapter()
     private var individualPointSum: Int = 0
-    private var appleArraySum:Int = 0
-    private var lemonArraySum:Int = 0
-    private var pearArraySum:Int = 0
-    private var grapeArraySum:Int = 0
+    private var appleArraySum: Int = 0
+    private var lemonArraySum: Int = 0
+    private var pearArraySum: Int = 0
+    private var grapeArraySum: Int = 0
+    var clearedPointNumber: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,7 +94,7 @@ class ToDoFragment : Fragment() {
                                 if (userDocument != null && userDocument.data != null) {
                                     val clearedPointString: String =
                                         userDocument.data?.get("point").toString()
-                                    var clearedPointNumber: Int = 0
+
                                     when (clearedPointString) {
                                         "1pt" -> clearedPointNumber = 1
                                         "2pt" -> clearedPointNumber = 2
@@ -112,6 +114,42 @@ class ToDoFragment : Fragment() {
                 }
             }
         )
+
+        //OpenButton is checked
+        toDoAdapter.setOnOpenButtonClickListener(
+            object : ToDoAdapter.OnOpenButtonClickListener {
+                override fun onItemClick(position: Int) {
+                    db.collection("users")
+                        .document(registeredName)
+                        .collection("ToDo")
+                        .document(sortedTitleArray[position])
+                        .get()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val userDocument = task.result
+                                if (userDocument != null && userDocument.data != null) {
+                                    val getTitle: String = userDocument.data?.get("title").toString()
+                                    val getPoint: String = userDocument.data?.get("point").toString()
+                                    val getNote: String = userDocument.data?.get("note").toString()
+
+                                    val bundle = Bundle()
+                                    bundle.putString("title", getTitle)
+                                    bundle.putString("point", getPoint)
+                                    bundle.putString("note", getNote)
+                                    bundle.putString("group", group)
+
+                                    val editFragment = EditFragment()
+                                    editFragment.arguments = bundle
+                                    val fragmentTransaction = fragmentManager?.beginTransaction()
+                                    fragmentTransaction?.addToBackStack(null)
+                                    fragmentTransaction?.replace(R.id.fragmentContainer, editFragment)
+                                    fragmentTransaction?.commit()
+                                }
+                            }
+                        }
+                }
+            }
+        )
     }
 
     override fun onDestroyView() {
@@ -123,7 +161,6 @@ class ToDoFragment : Fragment() {
         binding.colorBarPerson.isVisible = true
         binding.colorBarChart.isVisible = false
         binding.addButton.isVisible = true
-        binding.addButtonBackground.isVisible = true
         binding.recyclerView.isVisible = true
         binding.barChart.isVisible = false
         binding.appleIcon.isVisible = false
@@ -144,7 +181,6 @@ class ToDoFragment : Fragment() {
         binding.colorBarPerson.isVisible = false
         binding.colorBarChart.isVisible = true
         binding.addButton.isVisible = false
-        binding.addButtonBackground.isVisible = false
         binding.recyclerView.isVisible = false
         binding.barChart.isVisible = true
         binding.appleIcon.isVisible = true

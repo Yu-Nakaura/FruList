@@ -59,20 +59,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/add_button_background"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/circle_button"
-            android:contentDescription="@string/icon_background"
-            android:elevation="4dp"
-            android:visibility="visible"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/add"
+            app:backgroundTint="@color/dark_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline_to_do2"
+            app:layout_constraintHorizontal_bias="0.94"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintVertical_bias="0.95"/>
+            app:layout_constraintVertical_bias="0.976" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -86,7 +85,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/to_do_title_text"
-            app:layout_constraintVertical_bias="0.166" />
+            app:layout_constraintVertical_bias="0.166" >
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -97,21 +98,6 @@
         android:orientation="vertical"
         android:visibility="invisible"
         app:layout_constraintGuide_percent="0.5" />
-
-    <ImageButton
-        android:id="@+id/add_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/image_button_bg"
-        android:contentDescription="@string/add_icon"
-        android:src="@drawable/add"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.78"
-        app:layout_constraintStart_toStartOf="@id/guideline_to_do"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.94" />
 
     <ImageButton
         android:id="@+id/bar_chart_button"
