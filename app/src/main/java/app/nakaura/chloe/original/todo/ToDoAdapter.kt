@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import app.nakaura.chloe.original.R
 import app.nakaura.chloe.original.databinding.ToDoListItemBinding
 
 class ToDoAdapter : ListAdapter<ToDo, ToDoViewHolder>(diffUtilItemCallback) {
@@ -21,15 +22,28 @@ class ToDoAdapter : ListAdapter<ToDo, ToDoViewHolder>(diffUtilItemCallback) {
             Log.d("チェックされた", position.toString())
             listener.onItemClick(position)
         })
+        holder.binding.openButton.setOnClickListener (View.OnClickListener {
+            openListener.onItemClick(position)
+        })
     }
     private lateinit var listener: OnCheckBoxClickListener
+
+    private lateinit var openListener: OnOpenButtonClickListener
 
     interface OnCheckBoxClickListener{
         fun onItemClick(position: Int)
     }
 
+    interface  OnOpenButtonClickListener{
+        fun onItemClick(position: Int)
+    }
+
     fun setOnCheckBoxClickListener(listener: OnCheckBoxClickListener){
         this.listener = listener
+    }
+
+    fun setOnOpenButtonClickListener(openListener: OnOpenButtonClickListener){
+        this.openListener = openListener
     }
 
 }
@@ -52,5 +66,4 @@ private val diffUtilItemCallback = object : DiffUtil.ItemCallback<ToDo>() {
     override fun areItemsTheSame(oldItem: ToDo, newItem: ToDo): Boolean {
         return oldItem.title == newItem.title
     }
-
 }
