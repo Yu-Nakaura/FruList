@@ -546,6 +546,7 @@ class ToDoFragment : Fragment() {
 
         barChart.description.isEnabled= false
         barChart.legend.isEnabled= false
+        barChart.isScaleXEnabled = false
 
         //グラフのデータを設定
         val appleGraph: ArrayList<BarEntry> = ArrayList()
