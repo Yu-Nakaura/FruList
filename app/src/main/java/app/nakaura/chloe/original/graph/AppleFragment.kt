@@ -65,6 +65,8 @@ class AppleFragment : Fragment() {
     }
 
     private fun getSum() {
+        var point: String
+        var sumValue: Float
         for (i in 0 until appleArray.size) {
             db.collection("users")
                 .document(appleArray[i])
@@ -74,9 +76,16 @@ class AppleFragment : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val userDocument = task.result
-                        if (userDocument != null && userDocument.data != null) {
-                            Log.d("sum", "${appleArray[i]} -> ${userDocument.data}")
-                            val sumValue: Float = userDocument.data?.get("sum").toString().toInt().toFloat()
+                        if (userDocument != null) {
+                            if(userDocument.data != null){
+                                point = userDocument.data.toString()
+                                sumValue = userDocument.data?.get("sum").toString().toInt().toFloat()
+                            }else{
+                                point = "0"
+                                sumValue = 0F
+                            }
+                            Log.d("sum", "${appleArray[i]} -> $sumValue")
+
                             sumArray.add(sumValue)
                             userArray.add(appleArray[i])
                             Log.d("sumArray", sumArray.toString())

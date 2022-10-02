@@ -66,6 +66,8 @@ class LemonFragment : Fragment() {
     }
 
     private fun getSum() {
+        var point: String
+        var sumValue: Float
         for (i in 0 until lemonArray.size) {
             db.collection("users")
                 .document(lemonArray[i])
@@ -75,9 +77,15 @@ class LemonFragment : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val userDocument = task.result
-                        if (userDocument != null && userDocument.data != null) {
-                            Log.d("sum", "${lemonArray[i]} -> ${userDocument.data}")
-                            val sumValue: Float = userDocument.data?.get("sum").toString().toInt().toFloat()
+                        if (userDocument != null) {
+                            if(userDocument.data != null){
+                                point = userDocument.data.toString()
+                                sumValue = userDocument.data?.get("sum").toString().toInt().toFloat()
+                            }else{
+                                point = "0"
+                                sumValue = 0F
+                            }
+                            Log.d("sum", "${lemonArray[i]} -> $sumValue")
                             sumArray.add(sumValue)
                             userArray.add(lemonArray[i])
                             Log.d("sumArray", sumArray.toString())

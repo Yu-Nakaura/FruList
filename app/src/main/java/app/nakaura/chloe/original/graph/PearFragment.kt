@@ -66,6 +66,8 @@ class PearFragment : Fragment() {
     }
 
     private fun getSum() {
+        var point: String
+        var sumValue: Float
         for (i in 0 until pearArray.size) {
             db.collection("users")
                 .document(pearArray[i])
@@ -75,9 +77,16 @@ class PearFragment : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val userDocument = task.result
-                        if (userDocument != null && userDocument.data != null) {
+                        if (userDocument != null) {
+                            if(userDocument.data != null){
+                                point = userDocument.data.toString()
+                                sumValue = userDocument.data?.get("sum").toString().toInt().toFloat()
+                            }else{
+                                point = "0"
+                                sumValue = 0F
+                            }
                             Log.d("sum", "${pearArray[i]} -> ${userDocument.data}")
-                            val sumValue: Float = userDocument.data?.get("sum").toString().toInt().toFloat()
+
                             sumArray.add(sumValue)
                             userArray.add(pearArray[i])
                             Log.d("sumArray", sumArray.toString())
