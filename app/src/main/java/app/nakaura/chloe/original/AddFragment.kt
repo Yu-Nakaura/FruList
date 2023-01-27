@@ -40,7 +40,6 @@ class AddFragment : Fragment() {
         changeView()
         sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
         registeredName = sharedPref.getString("userFileName", "").toString()
-        Log.d("RegisteredName", registeredName)
 
         val pointItems = resources.getStringArray(R.array.point_list)
         val adapter = ArrayAdapter<String>(

@@ -14,8 +14,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.nakaura.chloe.original.AddFragment
+import app.nakaura.chloe.original.EditFragment
 import app.nakaura.chloe.original.R
 import app.nakaura.chloe.original.databinding.FragmentToDoBinding
+import app.nakaura.chloe.original.graph.GraphAdapter
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -44,10 +46,11 @@ class ToDoFragment : Fragment() {
     private val toDoList = ArrayList<ToDo>()
     private val toDoAdapter = ToDoAdapter()
     private var individualPointSum: Int = 0
-    private var appleArraySum:Int = 0
-    private var lemonArraySum:Int = 0
-    private var pearArraySum:Int = 0
-    private var grapeArraySum:Int = 0
+    private var appleArraySum: Int = 0
+    private var lemonArraySum: Int = 0
+    private var pearArraySum: Int = 0
+    private var grapeArraySum: Int = 0
+    var clearedPointNumber: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,11 +69,21 @@ class ToDoFragment : Fragment() {
         getGroup()
         getToDoTitle()
 
+
+
         binding.personButton.setOnClickListener {
             changeToPersonalView()
         }
         binding.barChartButton.setOnClickListener {
             changeToChartView()
+        }
+        binding.individualButton.setOnClickListener {
+            changeToIndividualView()
+            /// adapterのインスタンス生成
+            val graphAdapter = GraphAdapter(this)
+            /// adapterをセット
+            val viewPager2 = binding.viewPager
+            viewPager2.adapter = graphAdapter
         }
         binding.addButton.setOnClickListener {
             toAddFragment()
@@ -92,7 +105,7 @@ class ToDoFragment : Fragment() {
                                 if (userDocument != null && userDocument.data != null) {
                                     val clearedPointString: String =
                                         userDocument.data?.get("point").toString()
-                                    var clearedPointNumber: Int = 0
+
                                     when (clearedPointString) {
                                         "1pt" -> clearedPointNumber = 1
                                         "2pt" -> clearedPointNumber = 2
@@ -112,6 +125,42 @@ class ToDoFragment : Fragment() {
                 }
             }
         )
+
+        //OpenButton is checked
+        toDoAdapter.setOnOpenButtonClickListener(
+            object : ToDoAdapter.OnOpenButtonClickListener {
+                override fun onItemClick(position: Int) {
+                    db.collection("users")
+                        .document(registeredName)
+                        .collection("ToDo")
+                        .document(sortedTitleArray[position])
+                        .get()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val userDocument = task.result
+                                if (userDocument != null && userDocument.data != null) {
+                                    val getTitle: String = userDocument.data?.get("title").toString()
+                                    val getPoint: String = userDocument.data?.get("point").toString()
+                                    val getNote: String = userDocument.data?.get("note").toString()
+
+                                    val bundle = Bundle()
+                                    bundle.putString("title", getTitle)
+                                    bundle.putString("point", getPoint)
+                                    bundle.putString("note", getNote)
+                                    bundle.putString("group", group)
+
+                                    val editFragment = EditFragment()
+                                    editFragment.arguments = bundle
+                                    val fragmentTransaction = fragmentManager?.beginTransaction()
+                                    fragmentTransaction?.addToBackStack(null)
+                                    fragmentTransaction?.replace(R.id.fragmentContainer, editFragment)
+                                    fragmentTransaction?.commit()
+                                }
+                            }
+                        }
+                }
+            }
+        )
     }
 
     override fun onDestroyView() {
@@ -122,8 +171,8 @@ class ToDoFragment : Fragment() {
     private fun changeToPersonalView() {
         binding.colorBarPerson.isVisible = true
         binding.colorBarChart.isVisible = false
+        binding.colorBarIndividual.isVisible = false
         binding.addButton.isVisible = true
-        binding.addButtonBackground.isVisible = true
         binding.recyclerView.isVisible = true
         binding.barChart.isVisible = false
         binding.appleIcon.isVisible = false
@@ -134,6 +183,8 @@ class ToDoFragment : Fragment() {
         binding.lemonNumber.isVisible = false
         binding.pearNumber.isVisible = false
         binding.grapeNumber.isVisible = false
+        binding.viewPager.isVisible = false
+        binding.barChartButton.isEnabled = true
         appleArray.clear()
         lemonArray.clear()
         pearArray.clear()
@@ -142,9 +193,9 @@ class ToDoFragment : Fragment() {
 
     private fun changeToChartView() {
         binding.colorBarPerson.isVisible = false
+        binding.colorBarIndividual.isVisible = false
         binding.colorBarChart.isVisible = true
         binding.addButton.isVisible = false
-        binding.addButtonBackground.isVisible = false
         binding.recyclerView.isVisible = false
         binding.barChart.isVisible = true
         binding.appleIcon.isVisible = true
@@ -155,11 +206,36 @@ class ToDoFragment : Fragment() {
         binding.lemonNumber.isVisible = true
         binding.pearNumber.isVisible = true
         binding.grapeNumber.isVisible = true
+        binding.viewPager.isVisible = false
+        binding.barChartButton.isEnabled = false
         appleArraySum = 0
         lemonArraySum = 0
         pearArraySum = 0
         grapeArraySum = 0
         getAllUsers()
+    }
+
+    private fun changeToIndividualView() {
+        binding.colorBarPerson.isVisible = false
+        binding.colorBarChart.isVisible = false
+        binding.colorBarIndividual.isVisible = true
+        binding.addButton.isVisible = false
+        binding.recyclerView.isVisible = false
+        binding.barChart.isVisible = false
+        binding.appleIcon.isVisible = false
+        binding.lemonIcon.isVisible = false
+        binding.pearIcon.isVisible = false
+        binding.grapeIcon.isVisible = false
+        binding.appleNumber.isVisible = false
+        binding.lemonNumber.isVisible = false
+        binding.pearNumber.isVisible = false
+        binding.grapeNumber.isVisible = false
+        binding.viewPager.isVisible = true
+        binding.barChartButton.isEnabled = true
+        appleArray.clear()
+        lemonArray.clear()
+        pearArray.clear()
+        grapeArray.clear()
     }
 
     private fun getGroup() {
@@ -191,24 +267,28 @@ class ToDoFragment : Fragment() {
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_red)
                 binding.colorBarChart.setBackgroundResource(R.color.light_red)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_red)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_red)
             }
             "lemon" -> {
                 Log.d("change", "changeToLemon")
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_yellow)
                 binding.colorBarChart.setBackgroundResource(R.color.light_yellow)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_yellow)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_yellow)
             }
             "pear" -> {
                 Log.d("change", "changeToPear")
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_green)
                 binding.colorBarChart.setBackgroundResource(R.color.light_green)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_green)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_green)
             }
             "grape" -> {
                 Log.d("change", "changeToGrape")
                 binding.toDoTitleText.setBackgroundResource(R.color.dark_purple)
                 binding.colorBarChart.setBackgroundResource(R.color.light_purple)
                 binding.colorBarPerson.setBackgroundResource(R.color.light_purple)
+                binding.colorBarIndividual.setBackgroundResource(R.color.light_purple)
             }
         }
     }
@@ -466,6 +546,7 @@ class ToDoFragment : Fragment() {
 
         barChart.description.isEnabled= false
         barChart.legend.isEnabled= false
+        barChart.isScaleXEnabled = false
 
         //グラフのデータを設定
         val appleGraph: ArrayList<BarEntry> = ArrayList()
